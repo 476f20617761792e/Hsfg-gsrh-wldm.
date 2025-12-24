@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYSTEM_ROOT_TERMINAL</title>
+    <style>
+        body {
+            background-color: #050505;
+            color: #33ff00;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        #terminal {
+            display: flex;
+            flex-direction: column;
+            min-height: 90vh;
+        }
+
+        .line { margin-bottom: 5px; line-height: 1.4; word-wrap: break-word; }
+        
+        .flicker { animation: flicker-anim 1.5s infinite; }
+        @keyframes flicker-anim { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+        #input-line { display: flex; align-items: center; }
+        
+        input {
+            background: transparent;
+            border: none;
+            color: #33ff00;
+            outline: none;
+            font-family: inherit;
+            font-size: 1rem;
+            width: 100%;
+            padding: 0;
+            margin-left: 5px;
+        }
+
+        .admin-text { color: #fff; font-weight: bold; text-shadow: 0 0 5px #fff; }
+        .error-text { color: #ff3333; }
+        .log-item { cursor: pointer; color: #00ccff; text-decoration: underline; margin-top: 10px; display: block; width: fit-content; }
+        .log-content { color: #aaaaaa; margin-left: 20px; display: none; margin-bottom: 10px; border-left: 1px solid #333; padding-left: 10px; }
+
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body onclick="document.getElementById('user-input').focus()">
+
+    <div class="scanlines"></div>
+
+    <div id="terminal">
+        <div class="line">SYSTEM v4.0.1 - 24.12.2025</div>
+        <div class="line">Type 'Help' for a list of available commands.</div>
+        <div id="output"></div>
+        
+        <div id="input-line" class="line">
+            <span id="cursor-type" class="flicker">></span>
+            <input type="text" id="user-input" autofocus autocomplete="off" spellcheck="false">
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById('user-input');
+        const output = document.getElementById('output');
+        const cursorType = document.getElementById('cursor-type');
+        
+        let isAdmin = false;
+        let isWaitingForPassword = false;
+
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const val = this.value.trim();
+                const cmd = val.toLowerCase();
+                
+                // Print what user typed
+                addLine(val, "history-line");
+                this.value = '';
+
+                // LOGIC SPLIT: Is it a password or a command?
+                if (isWaitingForPassword) {
+                    handlePasswordAttempt(val);
+                } else {
+                    processCommand(cmd);
+                }
+            }
+        });
+
+        function addLine(text, className = "") {
+            const div = document.createElement('div');
+            div.className = 'line ' + className;
+            div.innerHTML = text;
+            output.appendChild(div);
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+
+        function processCommand(cmd) {
+            switch(cmd) {
+                case 'help':
+                    addLine("AVAILABLE: Logs, Initiate_Server, Login, Initiate_Logs, Initiate_Update, Stop, Stop_Server, Set_logtype=unlocked");
+                    break;
+
+                case 'logs':
+                    addLine("Redirecting to external repository...");
+                    setTimeout(() => window.location.href = "https://476f20617761792e.github.io/5365637265742e/", 1000);
+                    break;
+
+                case 'initiate_server':
+                    if (isAdmin) {
+                        addLine("err.bad_code.err.code=ERR 71892174", "error-text");
+                    } else {
+                        addLine("err.not.admin", "error-text");
+                    }
+                    break;
+
+                case 'login':
+                    addLine("Please input password");
+                    cursorType.innerText = "?"; // Change cursor to indicate waiting
+                    isWaitingForPassword = true;
+                    break;
+
+                case 'initiate_logs':
+                    addLine("Opening classified media...");
+                    setTimeout(() => window.open("https://youtu.be/Q20VfdeBtCM", "_blank"), 1000);
+                    break;
+
+                case 'initiate_update':
+                    addLine("65 72 72 2E 62 61 64 5F 63 6F 64 65 2E 65 72 72 2E 63 6F 64 65 3D 31 32 37 34 36");
+                    break;
+
+                case 'stop':
+                    addLine("Terminating session...");
+                    setTimeout(() => window.close(), 1000);
+                    break;
+
+                case 'stop_server':
+                    addLine("err.server_not_initiated", "error-text");
+                    setTimeout(() => {
+                        addLine("tried to initiate server first. failed.", "error-text");
+                    }, 5000);
+                    break;
+
+                case 'set_logtype=unlocked':
+                    addLine("Classified info. Please proceed", "admin-text");
+                    showClassifiedLogs();
+                    break;
+
+                case '': break;
+
+                default:
+                    addLine("Unknown command: " + cmd, "error-text");
+            }
+        }
+
+        function handlePasswordAttempt(val) {
+            if (val === '07062013') {
+                addLine("Logged In. Initiating Admin Account...");
+                input.disabled = true; 
+                cursorType.innerText = "-"; 
+                
+                setTimeout(() => {
+                    isAdmin = true;
+                    isWaitingForPassword = false;
+                    input.disabled = false;
+                    cursorType.innerText = ">"; 
+                    addLine("ADMIN STATUS: GRANTED", "admin-text");
+                    input.focus();
+                }, 5000);
+            } else {
+                addLine("ACCESS DENIED: INCORRECT PASSWORD", "error-text");
+                isWaitingForPassword = false;
+                cursorType.innerText = ">"; 
+            }
+        }
+
+        function showClassifiedLogs() {
+            const container = document.createElement('div');
+            container.innerHTML = `
+                <span class="log-item" onclick="toggleLog('cl1')">Classified Log 1</span>
+                <div id="cl1" class="log-content">I wish I could defeat it<br>Defeat the scientist...</div>
+                
+                <span class="log-item" onclick="toggleLog('cl2')">Classified Log 2</span>
+                <div id="cl2" class="log-content">I tried to defeat him... I couldn't...</div>
+            `;
+            output.appendChild(container);
+        }
+
+        function toggleLog(id) {
+            const el = document.getElementById(id);
+            el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+        }
+    </script>
+</body>
+</html>
