@@ -160,7 +160,7 @@
                     break;
 
                 case 'steam.status':
-                    addLine("It's down sadly");
+                    addLine("It's up, hell yeah!", "admin-text");
                     break;
                     
                 case '': break;
@@ -195,10 +195,13 @@
             const container = document.createElement('div');
             container.innerHTML = `
                 <span class="log-item" onclick="toggleLog('cl1')">Classified Log 1</span>
-                <div id="cl1" class="log-content">I wish I could defeat it<br>Defeat the scientist...</div>
+                <div id="cl1" class="log-content">I found the code<br>Now I need to find where to use it...</div>
                 
                 <span class="log-item" onclick="toggleLog('cl2')">Classified Log 2</span>
-                <div id="cl2" class="log-content">I tried to defeat him... I couldn't...</div>
+                <div id="cl2" class="log-content">This has something to do with the classified info</div>
+                
+                <span class="log-item" onclick="toggleLog('cl3')">Classified Log 3</span>
+                <div id="cl3" class="log-content">Okay so I found out<br>where to use it, enter logs and then enter<br>24122025 as the password</div>
             `;
             output.appendChild(container);
         }
@@ -210,6 +213,7 @@
     </script>
 </body>
 </html>
+
 
 
 
