@@ -106,7 +106,7 @@
         function processCommand(cmd) {
             switch(cmd) {
                 case 'help':
-                    addLine("AVAILABLE: Logs, Initiate_Server, Login, Initiate_Logs, Initiate_Update, Stop, Stop_Server, Set_logtype=, Steam.Status, System.Status");
+                    addLine("AVAILABLE: Logs, Initiate_Server, Login, Initiate_Logs, Initiate_Update, Stop, Stop_Server, Set_logtype=, Steam.Status, System.Status, Password_please");
                     break;
 
                 case 'logs':
@@ -157,10 +157,19 @@
                 case 'system.status':
                     addLine("ENTITY 1: Logged Off", "admin-text");
                     addLine("ENTITY 2: Broadly wandering", "admin-text");
+                    addLine("ENTITY 3: e̵̢̮̒͌́r̸̦̞̓͘r̷͖̂o̵͍̿̅ͅr̶̢͍̲̓̄", "admin-text");
                     break;
 
                 case 'steam.status':
                     addLine("It's up, hell yeah!", "admin-text");
+                    break;
+
+                    case 'password_please':
+                    if (isAdmin) {
+                        addLine("24122025");
+                    } else {
+                        addLine("You are not logged in as an admin", "error-text");
+                    }
                     break;
                     
                 case '': break;
@@ -201,7 +210,7 @@
                 <div id="cl2" class="log-content">This has something to do with the classified info</div>
                 
                 <span class="log-item" onclick="toggleLog('cl3')">Classified Log 3</span>
-                <div id="cl3" class="log-content">Okay so I found out<br>where to use it, enter logs and then enter<br>24122025 as the password</div>
+                <div id="cl3" class="log-content">Okay so I found out<br>where to use it, enter login and then enter<br>07062013 as the password</div>
             `;
             output.appendChild(container);
         }
@@ -213,6 +222,7 @@
     </script>
 </body>
 </html>
+
 
 
 
